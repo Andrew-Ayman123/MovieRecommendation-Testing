@@ -3,13 +3,10 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Recommendation {
-    private String userId;
-    private String username;
-    private List<String> recommendedMovieTitles;
-
+public record Recommendation(String userId, String username, List<String> recommendedMovieTitles) {
     /**
      * Constructs a new Recommendation object.
+     *
      * @param userId                 The user's id.
      * @param username               The user's name
      * @param recommendedMovieTitles A list of titles of recommended movies
@@ -20,15 +17,8 @@ public class Recommendation {
         this.recommendedMovieTitles = new ArrayList<>(recommendedMovieTitles);
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public List<String> getRecommendedMovieTitles() {
+    @Override
+    public List<String> recommendedMovieTitles() {
         // Return a copy or unmodifiable list to protect encapsulation
         return new ArrayList<>(recommendedMovieTitles);
     }

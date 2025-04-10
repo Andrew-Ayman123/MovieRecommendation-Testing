@@ -8,11 +8,7 @@ import java.util.Objects;
 /**
  * Represents a User with their name, ID, and a list of liked movie IDs.
  */
-public class User {
-    private String id;
-    private String name;
-    private List<String> likedMovieIds;
-
+public record User(String id, String name, List<String> likedMovieIds) {
     /**
      * Constructs a new User object.
      * @param id            The unique ID of the user.
@@ -25,15 +21,8 @@ public class User {
         this.likedMovieIds = new ArrayList<>(likedMovieIds);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<String> getLikedMovieIds() {
+    @Override
+    public List<String> likedMovieIds() {
         // Return a copy or unmodifiable list to protect encapsulation
         return new ArrayList<>(likedMovieIds);
     }

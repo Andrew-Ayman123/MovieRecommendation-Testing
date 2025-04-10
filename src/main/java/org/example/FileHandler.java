@@ -6,9 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Handles reading from user and movie files and writing recommendation files
@@ -99,9 +97,9 @@ public class FileHandler {
                 writer.newLine();
             } else if (recommendations != null) {
                 for (Recommendation recommendation : recommendations) {
-                    writer.write(recommendation.getUsername() + "," + recommendation.getUserId());
+                    writer.write(recommendation.username() + "," + recommendation.userId());
                     writer.newLine();
-                    writer.write(String.join(",", recommendation.getRecommendedMovieTitles()));
+                    writer.write(String.join(",", recommendation.recommendedMovieTitles()));
                     writer.newLine();
                 }
             } else {
