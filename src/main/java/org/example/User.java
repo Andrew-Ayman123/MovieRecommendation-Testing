@@ -1,37 +1,62 @@
 package org.example;
-import java.util.List;
-import java.util.Objects;
+
 import java.util.HashSet;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Objects;
 
-
-
-// esta3melt record 3ashan teb2a immutable bs momken nesta3mel private Final instead
-// w record betdina el equals method gahza
-public record User(String name,String id,List<String> favouriteMovieIDS) {
-
-/* we can t use equals in favouriteMoviesId by passing object
-because it compares by order
-so hashset mesh byehtam bel order
+/**
+ * Represents a User with their name, ID, and a list of liked movie IDs.
  */
-//we use function equals to check if we are already added the user before ,Preventing Duplicate users
+public class User {
+    private String id;
+    private String name;
+    private List<String> likedMovieIds;
+
+    /**
+     * Constructs a new User object.
+     * @param id            The unique ID of the user.
+     * @param name          The name of the user.
+     * @param likedMovieIds A list of movie IDs that the user likes.
+     */
+    public User(String id, String name, List<String> likedMovieIds) {
+        this.id = id;
+        this.name = name;
+        this.likedMovieIds = new ArrayList<>(likedMovieIds);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getLikedMovieIds() {
+        // Return a copy or unmodifiable list to protect encapsulation
+        return new ArrayList<>(likedMovieIds);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", likedMovieIds=" + likedMovieIds +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(name, user.name) && Objects.equals(id, user.id) && Objects.equals(new HashSet<>(this.favouriteMovieIDS), new HashSet<>(user.favouriteMovieIDS));
+        return Objects.equals(name, user.name) && Objects.equals(id, user.id) && Objects.equals(new HashSet<>(this.likedMovieIds), new HashSet<>(user.likedMovieIds));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, id, favouriteMovieIDS);
+        return Objects.hash(name, id, likedMovieIds);
     }
-    @Override
-    public String toString() {
-        return "User{" + "name='" + name + '\'' +
-                ", id='" + id + '\'' + ", favouriteMovieIds=" + favouriteMovieIDS +
-                '}';
-    }
-
-
 }
