@@ -1,44 +1,50 @@
 package org.example;
 
-
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Objects;
 
-//here I used private final instead of record
-public class Movie {
-    private final String title;
-    private final String id;
-    private final List<String> genres;
-
-    // Constructor
-    public Movie(String title, String id, List<String> genres) {
-        this.title = title;
+/**
+ * Represents a Movie with its title, ID, and genres.
+ */
+public record Movie(String id, String title, List<String> genres) {
+    /**
+     * Constructs a new Movie object.
+     *
+     * @param id     The unique ID of the movie.
+     * @param title  The title of the movie.
+     * @param genres A list of genres associated with the movie.
+     */
+    public Movie(String id, String title, List<String> genres) {
         this.id = id;
-        this.genres = genres;
+        this.title = title;
+        this.genres = new ArrayList<>(genres);
     }
 
-    // Getters
-    public String getTitle() {
-        return title;
+    @Override
+    public List<String> genres() {
+        // Return a copy or unmodifiable list to protect encapsulation
+        return new ArrayList<>(genres);
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public List<String> getGenres() {
-        return genres;
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "title='" + title + '\'' +
+                ", id='" + id + '\'' +
+                ", genres=" + genres +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Movie movie)) return false;
-        return Objects.equals(getTitle(), movie.getTitle()) && Objects.equals(getId(), movie.getId()) && Objects.equals(new HashSet<>(this.genres), new HashSet<>(movie.genres));
+        return Objects.equals(title(), movie.title()) && Objects.equals(id(), movie.id()) && Objects.equals(new HashSet<>(this.genres), new HashSet<>(movie.genres));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getTitle(), getId(), getGenres());
+        return Objects.hash(title(), id(), genres());
     }
 }
