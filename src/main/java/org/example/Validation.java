@@ -1,4 +1,5 @@
 package org.example;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,30 +8,24 @@ import java.util.regex.Matcher;
 
 //we used inteface to make unit testing easier
 public class Validation implements UserValidation,MovieValidation{
-    private final List<Movie> movies;
-    private final List<User> users;
+    private final List<Movie> movies = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
     private static final Pattern USER_ID_p = Pattern.compile("^\\d{8}[A-Z]");
 
 
-    public Validation(List<Movie> movies, List<User> users) {
-        this.movies = movies;
-        this.users = users;
-    }
-    public void valid(){
-        validateUserIdUniqueness();
-        users.forEach(this::uservalidation);
-        validMovieIdUniqueness();
-        movies.forEach(this::movievalidation);
+    public Validation() {
+
     }
 
     @Override
     public void movievalidation(Movie movie) {
         validateMovieTitle(movie.title());
         validateGenre(movie.genres());
-
+        movies.add(movie);
+        validMovieIdUniqueness();
 
     }
-    private void validateUserIdUniqueness() {
+    public void validateUserIdUniqueness() {
         Set<String> seenIds = new HashSet<>();
         for (User user : users) {
             String userId = user.id();
@@ -40,7 +35,7 @@ public class Validation implements UserValidation,MovieValidation{
             seenIds.add(userId);
         }
     }
-    private void validMovieIdUniqueness(){
+    public void validMovieIdUniqueness(){
         for(int i=0;i<movies.size();i++){
             Movie Cmovie=movies.get(i);
             String LastThreeDigits=getLastThreeDigits(Cmovie.id());
@@ -67,21 +62,23 @@ public class Validation implements UserValidation,MovieValidation{
     public void uservalidation(User user) {
         ValidUsername(user.name());
         ValidUserID(user.id());
+        users.add(user);
+        validateUserIdUniqueness();
     }
-    private void ValidUsername(String name){
+    public void ValidUsername(String name){
         if(name==null|| name.isEmpty() || name.startsWith(" ") ||!name.matches("[A-Za-z]+")){
             throw new RuntimeException("Error: User Name "+ name+ "Is Wrong");
         }
         validNameOrTitle(name,false);
     }
-    private void validateMovieTitle(String title){
+    public void validateMovieTitle(String title){
         if(title==null||title.isEmpty()){
             throw new RuntimeException("Movie title is empty");
         }
         validNameOrTitle(title,true);
     }
 
-    private void ValidUserID(String ID){
+    public void ValidUserID(String ID){
      if(ID.length()!=9 ||!USER_ID_p.matcher(ID).matches()){
          throw new RuntimeException("ERROR: User ID " + ID +  "is wrong");
      }

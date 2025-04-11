@@ -12,6 +12,11 @@ import java.util.List;
  * Handles reading from user and movie files and writing recommendation files
  */
 public class FileHandler {
+    Validation validation;
+
+    public FileHandler(Validation validation) {
+        this.validation = validation;
+    }
 
     /**
      * Reads movie data from the specified file path.
@@ -29,16 +34,19 @@ public class FileHandler {
                 String genresLine = reader.readLine();
 
                 String[] titleIdParts = titleIdLine.split(",");
-                String[] genreParts = genresLine.split(",");
-
                 String title = titleIdParts[0].trim();
+                validation.validateMovieTitle(title);
+
                 String id = titleIdParts[1].trim();
+
+                String[] genreParts = genresLine.split(",");
                 List<String> genres = new ArrayList<>();
                 for(String genre : genreParts) {
                     genres.add(genre.trim());
                 }
-
-                movies.add(new Movie(id, title, genres));
+                Movie movie = new Movie(id, title, genres);
+                validation.movievalidation(movie);
+                movies.add(movie);
 
             }
         }
@@ -61,6 +69,12 @@ public class FileHandler {
                 String likedMoviesLine = reader.readLine();
 
                 String[] nameIdParts = nameIdLine.split(",");
+                String name = nameIdParts[0].trim();
+                validation.ValidUsername(name);
+
+                String id = nameIdParts[1].trim();
+                validation.ValidUserID(id);
+
                 List<String> likedMovies = new ArrayList<>();
                 String[] likedMovieParts = likedMoviesLine.split(",");
                 for (String movieId : likedMovieParts) {
@@ -69,10 +83,9 @@ public class FileHandler {
                     }
                 }
 
-                String name = nameIdParts[0].trim();
-                String id = nameIdParts[1].trim();
-
-                users.add(new User(id, name, likedMovies));
+                User user = new User(id, name, likedMovies);
+                validation.uservalidation(user);
+                users.add(user);
             }
         }
         return users;
