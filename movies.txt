@@ -5,4 +5,4 @@ Action, Sci-Fi, Thriller
 The Godfather, GOD789
 Drama, Crime, Thriller
 The Conjuring, CON987
-Horror, Mystery, Thriller
+Horror, Mystery
