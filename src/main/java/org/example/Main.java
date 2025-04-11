@@ -19,6 +19,11 @@ public class Main {
         recommendations.add(new Recommendation("userId1", "username1", List.of("Movie1", "Movie2")));
 
         fileHandler.writeOutput("recommendations.txt", recommendations, null);
+
+        RecommendationEngine recommendationEngine = new RecommendationEngine(movies);
+
+        List<String> titles = recommendationEngine.recommend(users.get(0));
+        System.out.println(titles);
     }
 
     public static String returnString() {
