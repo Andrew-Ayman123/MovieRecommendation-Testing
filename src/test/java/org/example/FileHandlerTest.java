@@ -3,6 +3,7 @@ package org.example;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +18,12 @@ class FileHandlerTest {
 
     private FileHandler fileHandler;
     private Path tempDir;
+    private Validation mockValidation;
 
     @BeforeEach
     void setUp() throws IOException {
-        fileHandler = new FileHandler();
+        mockValidation = mock(Validation.class);
+        fileHandler = new FileHandler(mockValidation);
         tempDir = Files.createTempDirectory("testDir");
     }
 
