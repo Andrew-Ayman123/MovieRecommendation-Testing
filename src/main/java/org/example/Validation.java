@@ -19,11 +19,15 @@ public class Validation implements UserValidation,MovieValidation{
     public void valid(){
         validateUserIdUniqueness();
         users.forEach(this::uservalidation);
+        validMovieIdUniqueness();
         movies.forEach(this::movievalidation);
     }
 
     @Override
     public void movievalidation(Movie movie) {
+        validateMovieTitle(movie.title());
+        validateGenre(movie.genres());
+
 
     }
     private void validateUserIdUniqueness() {
@@ -36,6 +40,27 @@ public class Validation implements UserValidation,MovieValidation{
             seenIds.add(userId);
         }
     }
+    private void validMovieIdUniqueness(){
+        for(int i=0;i<movies.size();i++){
+            Movie Cmovie=movies.get(i);
+            String LastThreeDigits=getLastThreeDigits(Cmovie.id());
+            for(int j=i+1;j<movies.size();j++){
+                Movie Nmovie=movies.get(j);
+                String LastThreeDigits2=getLastThreeDigits(Nmovie.id());
+                if(LastThreeDigits.equals(LastThreeDigits2)){
+                    throw new RuntimeException("Movie ID numbers " + Cmovie.id() + " aren't unique");
+                }
+            }
+        }
+    }
+    private String getLastThreeDigits(String movieId) {
+        if (movieId == null || movieId.length() < 3) {
+            throw new RuntimeException("Invalid Movie ID format: " + movieId);
+        }
+        return movieId.substring(movieId.length() - 3);
+    }
+
+
 
 
     @Override
