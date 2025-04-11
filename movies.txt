@@ -1,8 +1,8 @@
 The Dark Knight, TDK123
 Action, Drama, Thriller
-Inception, INC456
+Inception, I456
 Action, Sci-Fi, Thriller
-The Godfather, GOD789
+The Godfather, TG789
 Drama, Crime, Thriller
-The Conjuring, CON987
+The Conjuring, TC987
 Horror, Mystery

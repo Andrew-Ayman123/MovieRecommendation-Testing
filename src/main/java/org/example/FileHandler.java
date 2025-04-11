@@ -38,6 +38,7 @@ public class FileHandler {
                 validation.validateMovieTitle(title);
 
                 String id = titleIdParts[1].trim();
+                validation.validateMovieID(id, title);
 
                 String[] genreParts = genresLine.split(",");
                 List<String> genres = new ArrayList<>();
@@ -69,8 +70,8 @@ public class FileHandler {
                 String likedMoviesLine = reader.readLine();
 
                 String[] nameIdParts = nameIdLine.split(",");
-                String name = nameIdParts[0].trim();
-                validation.ValidUsername(name);
+                String name = nameIdParts[0];
+                validation.validateUsername(name);
 
                 String id = nameIdParts[1].trim();
                 validation.ValidUserID(id);

@@ -1,4 +1,5 @@
 package org.example;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -6,11 +7,11 @@ import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-//we used inteface to make unit testing easier
-public class Validation implements UserValidation,MovieValidation{
+//we used interface to make unit testing easier
+public class Validation implements UserValidation, MovieValidation {
     private final List<Movie> movies = new ArrayList<>();
     private final List<User> users = new ArrayList<>();
-    private static final Pattern USER_ID_p = Pattern.compile("^\\d{8}[A-Z]");
+    private static final Pattern USER_ID_p = Pattern.compile("^\\d{8}[A-Z0-9]");
 
 
     public Validation() {
@@ -25,6 +26,7 @@ public class Validation implements UserValidation,MovieValidation{
         validMovieIdUniqueness();
 
     }
+
     public void validateUserIdUniqueness() {
         Set<String> seenIds = new HashSet<>();
         for (User user : users) {
@@ -35,19 +37,21 @@ public class Validation implements UserValidation,MovieValidation{
             seenIds.add(userId);
         }
     }
-    public void validMovieIdUniqueness(){
-        for(int i=0;i<movies.size();i++){
-            Movie Cmovie=movies.get(i);
-            String LastThreeDigits=getLastThreeDigits(Cmovie.id());
-            for(int j=i+1;j<movies.size();j++){
-                Movie Nmovie=movies.get(j);
-                String LastThreeDigits2=getLastThreeDigits(Nmovie.id());
-                if(LastThreeDigits.equals(LastThreeDigits2)){
+
+    public void validMovieIdUniqueness() {
+        for (int i = 0; i < movies.size(); i++) {
+            Movie Cmovie = movies.get(i);
+            String LastThreeDigits = getLastThreeDigits(Cmovie.id());
+            for (int j = i + 1; j < movies.size(); j++) {
+                Movie Nmovie = movies.get(j);
+                String LastThreeDigits2 = getLastThreeDigits(Nmovie.id());
+                if (LastThreeDigits.equals(LastThreeDigits2)) {
                     throw new RuntimeException("Movie ID numbers " + Cmovie.id() + " aren't unique");
                 }
             }
         }
     }
+
     private String getLastThreeDigits(String movieId) {
         if (movieId == null || movieId.length() < 3) {
             throw new RuntimeException("Invalid Movie ID format: " + movieId);
@@ -56,59 +60,54 @@ public class Validation implements UserValidation,MovieValidation{
     }
 
 
-
-
     @Override
     public void uservalidation(User user) {
-        ValidUsername(user.name());
+        validateUsername(user.name());
         ValidUserID(user.id());
         users.add(user);
         validateUserIdUniqueness();
     }
-    public void ValidUsername(String name){
-        if(name==null|| name.isEmpty() || name.startsWith(" ") ||!name.matches("[A-Za-z]+")){
-            throw new RuntimeException("Error: User Name "+ name+ "Is Wrong");
+
+    public void validateUsername(String name) {
+        // Doesn't allow space at the start. Space at the end is accepted
+        if (name == null || name.isEmpty() || !name.matches("[A-Za-z][A-Za-z ]*")) {
+            throw new RuntimeException("Error: User Name " + name + " is Wrong");
         }
-        validNameOrTitle(name,false);
-    }
-    public void validateMovieTitle(String title){
-        if(title==null||title.isEmpty()){
-            throw new RuntimeException("Movie title is empty");
-        }
-        validNameOrTitle(title,true);
     }
 
-    public void ValidUserID(String ID){
-     if(ID.length()!=9 ||!USER_ID_p.matcher(ID).matches()){
-         throw new RuntimeException("ERROR: User ID " + ID +  "is wrong");
-     }
-
+    public void validateMovieTitle(String title) {
+        if (title == null || title.isEmpty()) {
+            throw new RuntimeException("ERROR: Movie Title " + title + " is wrong");
+        }
+        String[] words = title.split(" ");
+        for (String word : words) {
+            if (!Character.isUpperCase(word.charAt(0))) {
+                throw new RuntimeException("ERROR: Movie Title " + title + " is wrong");
+            }
+        }
     }
-    private void validateGenre(List<String> genres){
-        if(genres==null ||genres.isEmpty()){
+
+    public void validateMovieID(String ID, String title) {
+        StringBuilder capitalLetters = new StringBuilder();
+        String[] words = title.split(" ");
+        for (String word : words) {
+            capitalLetters.append(word.charAt(0));
+        }
+        String IDStringPart = ID.substring(0, ID.length()-3);
+        if (!capitalLetters.toString().equals(IDStringPart)) {
+            throw new RuntimeException("ERROR: Movie Id " + ID + " is wrong");
+        }
+    }
+
+    public void ValidUserID(String ID) {
+        if (ID.length() != 9 || !USER_ID_p.matcher(ID).matches()) {
+            throw new RuntimeException("ERROR: User ID " + ID + " is wrong");
+        }
+    }
+
+    private void validateGenre(List<String> genres) {
+        if (genres == null || genres.isEmpty()) {
             throw new RuntimeException("Error:Movie genre is empty");
         }
     }
-
-
-
-    private void validNameOrTitle(String NT,boolean isTitle){
-        if (NT == null || NT.isEmpty()) {
-            throw new RuntimeException("ERROR: Name or title is empty");
-        }
-
-        String[] words = NT.split(" ");
-        for (String word : words) {
-            if (!Character.isUpperCase(word.charAt(0))) {
-                if (isTitle) {
-                    throw new RuntimeException("ERROR: Movie title " + NT + " is wrong");
-                } else {
-                    throw new RuntimeException("ERROR: User Name " + NT + " is wrong");
-                }
-            }
-        }
-
-
-    }
-
 }
