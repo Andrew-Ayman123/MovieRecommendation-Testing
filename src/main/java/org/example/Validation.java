@@ -1,5 +1,7 @@
 package org.example;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -15,6 +17,7 @@ public class Validation implements UserValidation,MovieValidation{
         this.users = users;
     }
     public void valid(){
+        validateUserIdUniqueness();
         users.forEach(this::uservalidation);
         movies.forEach(this::movievalidation);
     }
@@ -23,6 +26,17 @@ public class Validation implements UserValidation,MovieValidation{
     public void movievalidation(Movie movie) {
 
     }
+    private void validateUserIdUniqueness() {
+        Set<String> seenIds = new HashSet<>();
+        for (User user : users) {
+            String userId = user.id();
+            if (seenIds.contains(userId)) {
+                throw new RuntimeException("User ID " + userId + " is not unique");
+            }
+            seenIds.add(userId);
+        }
+    }
+
 
     @Override
     public void uservalidation(User user) {
@@ -35,12 +49,25 @@ public class Validation implements UserValidation,MovieValidation{
         }
         validNameOrTitle(name,false);
     }
+    private void validateMovieTitle(String title){
+        if(title==null||title.isEmpty()){
+            throw new RuntimeException("Movie title is empty");
+        }
+        validNameOrTitle(title,true);
+    }
+
     private void ValidUserID(String ID){
      if(ID.length()!=9 ||!USER_ID_p.matcher(ID).matches()){
          throw new RuntimeException("ERROR: User ID " + ID +  "is wrong");
      }
 
     }
+    private void validateGenre(List<String> genres){
+        if(genres==null ||genres.isEmpty()){
+            throw new RuntimeException("Error:Movie genre is empty");
+        }
+    }
+
 
 
     private void validNameOrTitle(String NT,boolean isTitle){
