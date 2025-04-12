@@ -6,28 +6,30 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        System.out.println("Hello, World!");
         Validation validation = new Validation();
         FileHandler fileHandler = new FileHandler(validation);
 
-        List<User> users = fileHandler.readUsers("users.txt");
-        List<Movie> movies = fileHandler.readMovies("movies.txt");
+        List<Movie> movies = null;
+        List<User> users = null;
+        try {
+            users = fileHandler.readUsers("users.txt");
+            movies = fileHandler.readMovies("movies.txt");
+        } catch (InputException e) {
+            System.out.println(e.getMessage());
+            fileHandler.writeOutput("recommendations.txt", null, e.getMessage());
+            return;
+        }
 
-        System.out.println(movies);
-        System.out.println(users);
-
-        List<Recommendation> recommendations = new ArrayList<>();
-        recommendations.add(new Recommendation("userId1", "username1", List.of("Movie1", "Movie2")));
-
-        fileHandler.writeOutput("recommendations.txt", recommendations, null);
+        if (movies == null || users == null) return;
 
         RecommendationEngine recommendationEngine = new RecommendationEngine(movies);
+        List<Recommendation> recommendations = new ArrayList<>();
 
-        List<String> titles = recommendationEngine.recommend(users.get(0));
-        System.out.println(titles);
-    }
+        for (User user: users) {
+            List<String> movieTitles = recommendationEngine.recommend(user);
+            recommendations.add(new Recommendation(user.id(), user.name(), movieTitles));
+        }
 
-    public static String returnString() {
-        return "Hello";
+        fileHandler.writeOutput("recommendations.txt", recommendations, null);
     }
 }
