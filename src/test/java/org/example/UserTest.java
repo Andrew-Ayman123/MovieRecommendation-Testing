@@ -27,8 +27,8 @@ public class UserTest {
     @Test
     public void differentOrderLikedMovies() {
         User karim = new User("2000318", "Karim Elnekheily", List.of("SA002", "KAR001", "MA003"));
-        User karim2 = new User("2001440", "Karim Elnekheily", List.of("KAR001", "SA002", "MA003"));
-        assertNotEquals(karim, karim2);
+        User karim2 = new User("2000318", "Karim Elnekheily", List.of("KAR001", "SA002", "MA003"));
+        assertEquals(karim, karim2);
     }
 
 
