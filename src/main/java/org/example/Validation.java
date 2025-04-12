@@ -8,10 +8,15 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 //we used interface to make unit testing easier
+
+
+
 public class Validation implements UserValidation, MovieValidation {
+
     private final List<Movie> movies = new ArrayList<>();
     private final List<User> users = new ArrayList<>();
     private static final Pattern USER_ID_p = Pattern.compile("^\\d{8}[A-Z0-9]");
+
 
 
     public Validation() {
@@ -24,7 +29,6 @@ public class Validation implements UserValidation, MovieValidation {
         validateGenre(movie.genres());
         movies.add(movie);
         validMovieIdUniqueness();
-
     }
 
     public void validateUserIdUniqueness() {
@@ -32,7 +36,7 @@ public class Validation implements UserValidation, MovieValidation {
         for (User user : users) {
             String userId = user.id();
             if (seenIds.contains(userId)) {
-                throw new RuntimeException("User ID " + userId + " is not unique");
+                throw new InputException("User ID " + userId + " is not unique");
             }
             seenIds.add(userId);
         }
@@ -46,7 +50,7 @@ public class Validation implements UserValidation, MovieValidation {
                 Movie Nmovie = movies.get(j);
                 String LastThreeDigits2 = getLastThreeDigits(Nmovie.id());
                 if (LastThreeDigits.equals(LastThreeDigits2)) {
-                    throw new RuntimeException("Movie ID numbers " + Cmovie.id() + " aren't unique");
+                    throw new InputException("Movie ID numbers " + Cmovie.id() + " aren't unique");
                 }
             }
         }
@@ -54,7 +58,7 @@ public class Validation implements UserValidation, MovieValidation {
 
     private String getLastThreeDigits(String movieId) {
         if (movieId == null || movieId.length() < 3) {
-            throw new RuntimeException("Invalid Movie ID format: " + movieId);
+            throw new InputException("Invalid Movie ID format: " + movieId);
         }
         return movieId.substring(movieId.length() - 3);
     }
@@ -71,18 +75,18 @@ public class Validation implements UserValidation, MovieValidation {
     public void validateUsername(String name) {
         // Doesn't allow space at the start. Space at the end is accepted
         if (name == null || name.isEmpty() || !name.matches("[A-Za-z][A-Za-z ]*")) {
-            throw new RuntimeException("Error: User Name " + name + " is Wrong");
+            throw new InputException("Error: User Name " + name + " is Wrong");
         }
     }
 
     public void validateMovieTitle(String title) {
         if (title == null || title.isEmpty()) {
-            throw new RuntimeException("ERROR: Movie Title " + title + " is wrong");
+            throw new InputException("ERROR: Movie Title " + title + " is wrong");
         }
         String[] words = title.split(" ");
         for (String word : words) {
             if (!Character.isUpperCase(word.charAt(0))) {
-                throw new RuntimeException("ERROR: Movie Title " + title + " is wrong");
+                throw new InputException("ERROR: Movie Title " + title + " is wrong");
             }
         }
     }
@@ -95,19 +99,19 @@ public class Validation implements UserValidation, MovieValidation {
         }
         String IDStringPart = ID.substring(0, ID.length()-3);
         if (!capitalLetters.toString().equals(IDStringPart)) {
-            throw new RuntimeException("ERROR: Movie Id " + ID + " is wrong");
+            throw new InputException("ERROR: Movie Id " + ID + " is wrong");
         }
     }
 
     public void ValidUserID(String ID) {
         if (ID.length() != 9 || !USER_ID_p.matcher(ID).matches()) {
-            throw new RuntimeException("ERROR: User ID " + ID + " is wrong");
+            throw new InputException("ERROR: User ID " + ID + " is wrong");
         }
     }
 
     private void validateGenre(List<String> genres) {
         if (genres == null || genres.isEmpty()) {
-            throw new RuntimeException("Error:Movie genre is empty");
+            throw new InputException("Error:Movie genre is empty");
         }
     }
 }

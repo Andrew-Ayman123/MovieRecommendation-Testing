@@ -49,7 +49,10 @@ public class RecommendationEngine {
 
         // Get all user's liked genres
         for (String movieId: user.likedMovieIds()) {
-            Movie movie = movies.stream().filter(m -> Objects.equals(m.id(), movieId)).findFirst().orElse(null);
+            Movie movie = movies.stream()
+                    .filter(m -> Objects.equals(m.id(), movieId))
+                    .findFirst()
+                    .orElse(null);
             if (movie != null)
                 likedGenres.addAll(movie.genres());
         }

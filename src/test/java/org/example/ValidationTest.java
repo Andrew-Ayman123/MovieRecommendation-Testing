@@ -17,6 +17,7 @@ class ValidationTest {
 
     // USERNAME VALIDATION
 
+
     @Test
     void validUsername_shouldNotThrow() {
         assertDoesNotThrow(() -> validation.validateUsername("John Doe"));
@@ -24,21 +25,21 @@ class ValidationTest {
 
     @Test
     void usernameStartingWithSpace_shouldThrow() {
-        RuntimeException exception = assertThrows(RuntimeException.class,
+        InputException exception = assertThrows(InputException.class,
                 () -> validation.validateUsername(" john"));
         assertTrue(exception.getMessage().contains("User Name"));
     }
 
     @Test
     void emptyUsername_shouldThrow() {
-        RuntimeException exception = assertThrows(RuntimeException.class,
+        InputException exception = assertThrows(InputException.class,
                 () -> validation.validateUsername(""));
         assertTrue(exception.getMessage().contains("User Name"));
     }
 
     @Test
     void nullUsername_shouldThrow() {
-        RuntimeException exception = assertThrows(RuntimeException.class,
+        InputException exception = assertThrows(InputException.class,
                 () -> validation.validateUsername(null));
         assertTrue(exception.getMessage().contains("User Name"));
     }
@@ -52,12 +53,12 @@ class ValidationTest {
 
     @Test
     void invalidUserIdLength_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.ValidUserID("1234"));
+        assertThrows(InputException.class, () -> validation.ValidUserID("1234"));
     }
 
     @Test
     void invalidUserIdFormat_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.ValidUserID("ABCDEFGHJ"));
+        assertThrows(InputException.class, () -> validation.ValidUserID("ABCDEFGHJ"));
     }
 
     // USER VALIDATION
@@ -73,7 +74,7 @@ class ValidationTest {
         User user1 = new User("12345678A", "Bob", List.of("TG123"));
         User user2 = new User("12345678A", "Alice", List.of("TG123"));
         validation.uservalidation(user1);
-        assertThrows(RuntimeException.class, () -> validation.uservalidation(user2));
+        assertThrows(InputException.class, () -> validation.uservalidation(user2));
     }
 
     // MOVIE TITLE VALIDATION
@@ -85,17 +86,17 @@ class ValidationTest {
 
     @Test
     void movieTitleLowercaseStart_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.validateMovieTitle("the Matrix"));
+        assertThrows(InputException.class, () -> validation.validateMovieTitle("the Matrix"));
     }
 
     @Test
     void emptyMovieTitle_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.validateMovieTitle(""));
+        assertThrows(InputException.class, () -> validation.validateMovieTitle(""));
     }
 
     @Test
     void nullMovieTitle_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.validateMovieTitle(null));
+        assertThrows(InputException.class, () -> validation.validateMovieTitle(null));
     }
 
     // MOVIE ID VALIDATION
@@ -107,7 +108,7 @@ class ValidationTest {
 
     @Test
     void invalidMovieIdMismatch_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.validateMovieID("AB123", "The Matrix"));
+        assertThrows(InputException.class, () -> validation.validateMovieID("AB123", "The Matrix"));
     }
 
     // GENRE VALIDATION
@@ -119,12 +120,12 @@ class ValidationTest {
 
     @Test
     void emptyGenres_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.movievalidation(new Movie("TM123", "The Matrix", List.of())));
+        assertThrows(InputException.class, () -> validation.movievalidation(new Movie("TM123", "The Matrix", List.of())));
     }
 
     @Test
     void nullGenres_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.movievalidation(new Movie("TM123", "The Matrix", null)));
+        assertThrows(InputException.class, () -> validation.movievalidation(new Movie("TM123", "The Matrix", List.of())));
     }
 
     // MOVIE ID UNIQUENESS TESTS
@@ -134,7 +135,7 @@ class ValidationTest {
         Movie movie1 = new Movie("MOV123", "Movie One", List.of("Action"));
         Movie movie2 = new Movie("FIL123", "Film Two", List.of("Drama"));
         validation.movievalidation(movie1);
-        assertThrows(RuntimeException.class, () -> validation.movievalidation(movie2));
+        assertThrows(InputException.class, () -> validation.movievalidation(movie2));
     }
 
     @Test
@@ -149,7 +150,7 @@ class ValidationTest {
 
     @Test
     void getLastThreeDigits_invalidId_shouldThrow() {
-        assertThrows(RuntimeException.class, () -> validation.movievalidation(new Movie("MO", "Movie", List.of("Comedy"))));
+        assertThrows(InputException.class, () -> validation.movievalidation(new Movie("MO", "Movie", List.of("Comedy"))));
     }
 
 }
