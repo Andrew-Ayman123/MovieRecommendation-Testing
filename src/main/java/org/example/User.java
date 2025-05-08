@@ -1,30 +1,48 @@
 package org.example;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Objects;
 
 /**
  * Represents a User with their name, ID, and a list of liked movie IDs.
  */
-public record User(String id, String name, List<String> likedMovieIds) {
-    /**
-     * Constructs a new User object.
-     * @param id            The unique ID of the user.
-     * @param name          The name of the user.
-     * @param likedMovieIds A list of movie IDs that the user likes.
-     */
+public class User {
+    private String id;
+    private String name;
+    private List<String> likedMovieIds;
+
     public User(String id, String name, List<String> likedMovieIds) {
         this.id = id;
         this.name = name;
-        this.likedMovieIds = new ArrayList<>(likedMovieIds);
+        this.likedMovieIds = new ArrayList<>(likedMovieIds); // Defensive copy
     }
 
-    @Override
-    public List<String> likedMovieIds() {
-        // Return a copy or unmodifiable list to protect encapsulation
-        return new ArrayList<>(likedMovieIds);
+    // Getters
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<String> getLikedMovieIds() {
+        return new ArrayList<>(likedMovieIds); // Defensive copy
+    }
+
+    // Setters
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setLikedMovieIds(List<String> likedMovieIds) {
+        this.likedMovieIds = new ArrayList<>(likedMovieIds); // Defensive copy
     }
 
     @Override
@@ -38,14 +56,14 @@ public record User(String id, String name, List<String> likedMovieIds) {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(name, user.name) && Objects.equals(id, user.id) && Objects.equals(new HashSet<>(this.likedMovieIds), new HashSet<>(user.likedMovieIds));
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(name, user.name) &&
+               Objects.equals(id, user.id) &&
+               Objects.equals(new HashSet<>(this.likedMovieIds), new HashSet<>(user.likedMovieIds));
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, id, likedMovieIds);
+        return Objects.hash(name, id, new HashSet<>(likedMovieIds));
     }
 }

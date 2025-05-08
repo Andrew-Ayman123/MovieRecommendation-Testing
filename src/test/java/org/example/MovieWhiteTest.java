@@ -7,7 +7,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-public class MovieTest {
+class MovieWhiteTest {
+
     @Test
     public void equals_sameAttributes() {
         Movie movie1 = new Movie("LM002", "Before Us", List.of("Romance", "Drama"));
@@ -16,55 +17,58 @@ public class MovieTest {
     }
 
     @Test
-    public void Notequal_differentTitle() {
+    public void notEqual_differentTitle() {
         Movie movie1 = new Movie("LM002", "Annabelle", List.of("Horror", "Thriller"));
         Movie movie2 = new Movie("LM002", "The Conjuring", List.of("Horror", "Thriller"));
         assertNotEquals(movie1, movie2);
     }
 
     @Test
-    public void DifferentID() {
+    public void notEqual_differentID() {
         Movie movie1 = new Movie("LM002", "Annabelle", List.of("Horror", "Thriller"));
         Movie movie2 = new Movie("LM102", "Annabelle", List.of("Horror", "Thriller"));
         assertNotEquals(movie1, movie2);
     }
 
     @Test
-    public void   differentGenres() {
+    public void notEqual_differentGenres() {
         Movie movie1 = new Movie("LM002", "Annabelle", List.of("Thriller"));
         Movie movie2 = new Movie("LM102", "Annabelle", List.of("Horror", "Thriller"));
         assertNotEquals(movie1, movie2);
     }
 
     @Test
-    public void sameGenresDifferentOrder() {
+    public void equals_sameGenresDifferentOrder() {
         Movie movie1 = new Movie("LM002", "Annabelle", List.of("Thriller", "Horror"));
         Movie movie2 = new Movie("LM002", "Annabelle", List.of("Horror", "Thriller"));
-        assertEquals(movie1 , movie2);
+        assertEquals(movie1, movie2);
     }
 
     @Test
-    public void NotNull() {
+    public void toString_correctFormat() {
         Movie movie = new Movie("LM002", "Annabelle", List.of("Thriller", "Horror"));
-        assertNotEquals(null, movie);
+        String expected = "Movie{title='Annabelle', id='LM002', genres=[Thriller, Horror]}";
+        assertEquals(expected, movie.toString());
     }
 
-    /*
-    "Movie{" +
-                "title='" + title + '\'' +
-                ", id='" + id + '\'' +
-                ", genres=" + genres +
-                '}'
-     */
-    /* we need to check if it returns this format */
     @Test
-    public void check_Return_String(){
-        Movie movie = new Movie("LM002", "Annabelle", List.of("Thriller", "Horror"));
-        String exp = "Movie{title='Annabelle', id='LM002', genres=[Thriller, Horror]}";
-        assertEquals(movie.toString(),exp);
+    void testMovieSetAndGetTitle() {
+        Movie movie = new Movie("TM123", "The Matrix", List.of("Action", "Sci-Fi"));
+        movie.setTitle("Inception");
+        assertEquals("Inception", movie.getTitle());
     }
 
+    @Test
+    void testMovieSetAndGetId() {
+        Movie movie = new Movie("TM123", "The Matrix", List.of("Action", "Sci-Fi"));
+        movie.setId("IN456");
+        assertEquals("IN456", movie.getId());
+    }
 
-
-
+    @Test
+    void testMovieSetAndGetGenres() {
+        Movie movie = new Movie("TM123", "The Matrix", List.of("Action", "Sci-Fi"));
+        movie.setGenres(List.of("Thriller", "Drama"));
+        assertEquals(List.of("Thriller", "Drama"), movie.getGenres());
+    }
 }

@@ -27,7 +27,7 @@ public class Main {
 
         for (User user: users) {
             List<String> movieTitles = recommendationEngine.recommend(user);
-            recommendations.add(new Recommendation(user.id(), user.name(), movieTitles));
+            recommendations.add(new Recommendation(user.getId(), user.getName(), movieTitles));
         }
 
         fileHandler.writeOutput("recommendations.txt", recommendations, null);

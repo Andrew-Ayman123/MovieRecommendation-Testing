@@ -127,14 +127,14 @@ public class FileHandler {
     
         for (User user : validation.getUsers()) {
             List<String> recommendedMovies = new ArrayList<>();
-            for (String likedMovieId : user.likedMovieIds()) {
+            for (String likedMovieId : user.getLikedMovieIds()) {
                 for (Movie movie : validation.getMovies()) {
-                    if (movie.id().equals(likedMovieId)) {
-                        recommendedMovies.add(movie.title());
+                    if (movie.getId().equals(likedMovieId)) {
+                        recommendedMovies.add(movie.getTitle());
                     }
                 }
             }
-            recommendations.add(new Recommendation(user.name(), user.id(), recommendedMovies));
+            recommendations.add(new Recommendation(user.getName(), user.getId(), recommendedMovies));
         }
     
         writeOutput(filePath, recommendations, null);

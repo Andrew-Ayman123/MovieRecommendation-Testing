@@ -22,15 +22,15 @@ public class RecommendationEngine {
 
         // Get all movie genres
         for (Movie movie: movies) {
-            allGenres.addAll(movie.genres());
+            allGenres.addAll(movie.getGenres());
         }
 
         // Build genreMovies map
         for (String genre: allGenres) {
             List<String> genreMovieTitles = new ArrayList<>();
             for (Movie movie: movies) {
-                if (movie.genres().contains(genre)) {
-                    genreMovieTitles.add(movie.title());
+                if (movie.getGenres().contains(genre)) {
+                    genreMovieTitles.add(movie.getTitle());
                 }
             }
             genreMovieTitlesMap.put(genre, genreMovieTitles);
@@ -48,13 +48,13 @@ public class RecommendationEngine {
         Set<String> likedGenres = new HashSet<>();
 
         // Get all user's liked genres
-        for (String movieId: user.likedMovieIds()) {
+        for (String movieId: user.getLikedMovieIds()) {
             Movie movie = movies.stream()
-                    .filter(m -> Objects.equals(m.id(), movieId))
+                    .filter(m -> Objects.equals(m.getId(), movieId))
                     .findFirst()
                     .orElse(null);
             if (movie != null)
-                likedGenres.addAll(movie.genres());
+                likedGenres.addAll(movie.getGenres());
         }
 
         // Get all movies with the same genres

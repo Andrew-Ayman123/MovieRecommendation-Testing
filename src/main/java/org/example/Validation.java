@@ -5,7 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 
 //we used interface to make unit testing easier
 
@@ -25,8 +24,8 @@ public class Validation implements UserValidation, MovieValidation {
 
     @Override
     public void movievalidation(Movie movie) {
-        validateMovieTitle(movie.title());
-        validateGenre(movie.genres());
+        validateMovieTitle(movie.getTitle());
+        validateGenre(movie.getGenres());
         movies.add(movie);
         validMovieIdUniqueness();
     }
@@ -34,7 +33,7 @@ public class Validation implements UserValidation, MovieValidation {
     public void validateUserIdUniqueness() {
         Set<String> seenIds = new HashSet<>();
         for (User user : users) {
-            String userId = user.id();
+            String userId = user.getId();
             if (seenIds.contains(userId)) {
                 throw new InputException("User ID " + userId + " is not unique");
             }
@@ -45,12 +44,12 @@ public class Validation implements UserValidation, MovieValidation {
     public void validMovieIdUniqueness() {
         for (int i = 0; i < movies.size(); i++) {
             Movie Cmovie = movies.get(i);
-            String LastThreeDigits = getLastThreeDigits(Cmovie.id());
+            String LastThreeDigits = getLastThreeDigits(Cmovie.getId());
             for (int j = i + 1; j < movies.size(); j++) {
                 Movie Nmovie = movies.get(j);
-                String LastThreeDigits2 = getLastThreeDigits(Nmovie.id());
+                String LastThreeDigits2 = getLastThreeDigits(Nmovie.getId());
                 if (LastThreeDigits.equals(LastThreeDigits2)) {
-                    throw new InputException("Movie ID numbers " + Cmovie.id() + " aren't unique");
+                    throw new InputException("Movie ID numbers " + Cmovie.getId() + " aren't unique");
                 }
             }
         }
@@ -66,8 +65,8 @@ public class Validation implements UserValidation, MovieValidation {
 
     @Override
     public void uservalidation(User user) {
-        validateUsername(user.name());
-        ValidUserID(user.id());
+        validateUsername(user.getName());
+        ValidUserID(user.getId());
         users.add(user);
         validateUserIdUniqueness();
     }

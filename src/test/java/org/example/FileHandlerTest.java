@@ -48,8 +48,8 @@ class FileHandlerTest {
         List<Movie> movies = fileHandler.readMovies(file.toString());
 
         assertEquals(2, movies.size());
-        assertEquals("TMX123", movies.get(0).id());
-        assertTrue(movies.get(0).genres().contains("Sci-Fi"));
+        assertEquals("TMX123", movies.get(0).getId());
+        assertTrue(movies.get(0).getGenres().contains("Sci-Fi"));
     }
 
     @Test
@@ -75,9 +75,9 @@ class FileHandlerTest {
         List<User> users = fileHandler.readUsers(file.toString());
 
         assertEquals(2, users.size());
-        assertEquals("Alice", users.get(0).name());
-        assertEquals("12345678A", users.get(0).id());
-        assertEquals(2, users.get(0).likedMovieIds().size());
+        assertEquals("Alice", users.get(0).getName());
+        assertEquals("12345678A", users.get(0).getId());
+        assertEquals(2, users.get(0).getLikedMovieIds().size());
     }
 
     @Test
