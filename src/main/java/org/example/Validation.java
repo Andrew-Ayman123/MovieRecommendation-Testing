@@ -114,4 +114,11 @@ public class Validation implements UserValidation, MovieValidation {
             throw new InputException("Error:Movie genre is empty");
         }
     }
+    public List<Movie> getMovies() {
+        return new ArrayList<>(movies); // Return a copy to prevent external modification
+    }
+    
+    public List<User> getUsers() {
+        return new ArrayList<>(users); // Return a copy to prevent external modification
+    }
 }

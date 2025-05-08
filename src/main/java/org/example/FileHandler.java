@@ -122,4 +122,21 @@ public class FileHandler {
             }
         }
     }
+    public void generateRecommendations(String filePath) throws IOException {
+        List<Recommendation> recommendations = new ArrayList<>();
+    
+        for (User user : validation.getUsers()) {
+            List<String> recommendedMovies = new ArrayList<>();
+            for (String likedMovieId : user.likedMovieIds()) {
+                for (Movie movie : validation.getMovies()) {
+                    if (movie.id().equals(likedMovieId)) {
+                        recommendedMovies.add(movie.title());
+                    }
+                }
+            }
+            recommendations.add(new Recommendation(user.name(), user.id(), recommendedMovies));
+        }
+    
+        writeOutput(filePath, recommendations, null);
+    }
 }
